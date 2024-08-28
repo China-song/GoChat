@@ -1,0 +1,13 @@
+# Intellij project files
+.idea/
+
+# docker volumes files for sharing data
+components/
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+bin/
