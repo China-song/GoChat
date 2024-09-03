@@ -38,15 +38,15 @@ func (l *FriendPutInHandleLogic) FriendPutInHandle(in *social.FriendPutInHandleR
 	friendRequest, err := l.svcCtx.FriendRequestsModel.FindOne(l.ctx, uint64(in.FriendReqId))
 	if err != nil {
 		fmt.Println("FriendRequestsModel.FindOne err: ", err)
-		return nil, err
+		return &social.FriendPutInHandleResp{}, err
 	}
 
 	// 好友申请记录存在，判断是否已处理
 	switch constants.HandlerResult(friendRequest.HandleResult.Int64) {
 	case constants.PassHandlerResult:
-		return nil, ErrFriendReqPassed
+		return &social.FriendPutInHandleResp{}, ErrFriendReqPassed
 	case constants.RefuseHandlerResult:
-		return nil, ErrFriendReqRefused
+		return &social.FriendPutInHandleResp{}, ErrFriendReqRefused
 	}
 
 	fmt.Println("friend putin record exist, need to be handled!")
@@ -84,7 +84,7 @@ func (l *FriendPutInHandleLogic) FriendPutInHandle(in *social.FriendPutInHandleR
 	})
 	if err != nil {
 		fmt.Println("handle trans err: ", err)
-		return nil, err
+		return &social.FriendPutInHandleResp{}, err
 	}
 	return &social.FriendPutInHandleResp{}, nil
 }
