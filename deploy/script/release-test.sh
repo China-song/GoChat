@@ -4,6 +4,7 @@ need_start_service_shell=(
     user-rpc-test.sh
 
     # api
+    user-api-test.sh
 )
 
 for i in ${need_start_service_shell[*]} ; do
