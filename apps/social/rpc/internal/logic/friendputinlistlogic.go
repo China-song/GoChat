@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"fmt"
+	"github.com/jinzhu/copier"
 
 	"GoChat/apps/social/rpc/internal/svc"
 	"GoChat/apps/social/rpc/social"
@@ -24,7 +26,20 @@ func NewFriendPutInListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *F
 }
 
 func (l *FriendPutInListLogic) FriendPutInList(in *social.FriendPutInListReq) (*social.FriendPutInListResp, error) {
-	// todo: add your logic here and delete this line
+	friendReqList, err := l.svcCtx.FriendRequestsModel.ListNoHandler(l.ctx, in.UserId)
+	if err != nil {
+		fmt.Println("social rpc FriendPutInList err: ", err)
+		return &social.FriendPutInListResp{}, err
+	}
 
-	return &social.FriendPutInListResp{}, nil
+	var resp []*social.FriendRequests
+	err = copier.Copy(&resp, &friendReqList)
+	if err != nil {
+		fmt.Println("social rpc GroupList: copier.Copy err: ", err)
+		return &social.FriendPutInListResp{}, err
+	}
+
+	return &social.FriendPutInListResp{
+		List: resp,
+	}, nil
 }
