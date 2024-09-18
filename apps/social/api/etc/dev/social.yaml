@@ -14,6 +14,16 @@ UserRpc:
       - 192.168.56.1:3379
     Key: user.rpc
 
+ImRpc:
+  Etcd:
+    Hosts:
+      - 192.168.56.1:3379
+    Key: im.rpc
 
 JwtAuth:
   AccessSecret: song-go-chat
+
+Redisx:
+  Host: 192.168.56.1:16379
+  Type: node
+  Pass: GoChat

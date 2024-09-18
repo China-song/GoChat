@@ -10,3 +10,8 @@ UserRpc:
 
 JwtAuth:
   AccessSecret: song-go-chat
+
+Redisx:
+  Host: 192.168.56.1:16379
+  Type: node
+  Pass: GoChat

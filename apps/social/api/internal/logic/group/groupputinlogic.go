@@ -1,13 +1,13 @@
 package group
 
 import (
-	"GoChat/apps/social/rpc/socialclient"
-	"GoChat/pkg/ctxdata"
-	"context"
-	"fmt"
-
+	"GoChat/apps/im/rpc/imclient"
 	"GoChat/apps/social/api/internal/svc"
 	"GoChat/apps/social/api/internal/types"
+	"GoChat/apps/social/rpc/socialclient"
+	"GoChat/pkg/constants"
+	"GoChat/pkg/ctxdata"
+	"context"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -29,10 +29,10 @@ func NewGroupPutInLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GroupP
 
 func (l *GroupPutInLogic) GroupPutIn(req *types.GroupPutInRep) (resp *types.GroupPutInResp, err error) {
 	// todo: types.GroupPutInRep add field 邀请者 被邀请者
-	// 若是邀请 ReqId = 被邀请者   InviterUid = uid
-	// 不是邀请 ReqId = uid
+	// 若是邀请 ReqId = 被邀请者   InviterUid = uid  JoinSource = InviteGroupJoinSource
+	// 不是邀请 ReqId = uid JoinSource = PutInGroupJoinSource
 	uid := ctxdata.GetUID(l.ctx)
-	_, err = l.svcCtx.Social.GroupPutin(l.ctx, &socialclient.GroupPutinReq{
+	res, err := l.svcCtx.Social.GroupPutin(l.ctx, &socialclient.GroupPutinReq{
 		GroupId:    req.GroupId,
 		ReqId:      uid,
 		ReqMsg:     req.ReqMsg,
@@ -40,7 +40,21 @@ func (l *GroupPutInLogic) GroupPutIn(req *types.GroupPutInRep) (resp *types.Grou
 		JoinSource: int32(req.JoinSource),
 	})
 	if err != nil {
-		fmt.Println("social api group GroupPutIn: call rpc Social.GroupPutin err: ", err)
+		l.Errorf("social api - (group) GroupPutIn - rpc Social.GroupPutin err: ", err)
+		return nil, err
+	}
+
+	if res.GroupId == "" {
+		return nil, err
+	}
+	// 建立会话
+	_, err = l.svcCtx.Im.SetUpUserConversation(l.ctx, &imclient.SetUpUserConversationReq{
+		SendId:   uid,
+		RecvId:   res.GroupId,
+		ChatType: int32(constants.GroupChatType),
+	})
+	if err != nil {
+		l.Errorf("social api - (group) GroupPutIn - rpc Im.SetUpUserConversation err: ", err)
 		return nil, err
 	}
 	return
