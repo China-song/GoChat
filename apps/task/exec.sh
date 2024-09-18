@@ -1,0 +1,1 @@
+kafka-console-producer.sh --broker-list 192.168.56.1:9092 --topic msgChatTransfer

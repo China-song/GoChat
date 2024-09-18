@@ -1,0 +1,43 @@
+Name: task.mq
+ListenOn: 0.0.0.0:10091
+
+MsgChatTransfer:
+  Name: MsgChatTransfer
+  Brokers:
+    - 192.168.56.1:9092
+  Group: kafka
+  Topic: msgChatTransfer
+  Offset: first
+  Consumers: 1
+
+MsgReadTransfer:
+  Name: MsgReadTransfer
+  Brokers:
+    - 192.168.56.1:9092
+  Group: kafka
+  Topic: msgReadTransfer
+  Offset: first
+  Consumers: 1
+
+MsgReadHandler:
+  GroupMsgReadHandler: 1
+  GroupMsgReadRecordDelayTime: 60
+  GroupMsgReadRecordDelayCount: 2
+
+Redisx:
+  Host: 192.168.56.1:16379
+  Type: node
+  Pass: GoChat
+
+Mongo:
+  Url: "mongodb://root:root@192.168.56.1:47017"
+  Db: go-chat
+
+Ws:
+  Host: 192.168.56.1:10090
+
+SocialRpc:
+  Etcd:
+    Hosts:
+      - 192.168.56.1:3379
+    Key: social.rpc
