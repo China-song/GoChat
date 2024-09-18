@@ -1,0 +1,19 @@
+Name: im.ws
+ListenOn: 0.0.0.0:10090
+
+JwtAuth:
+  AccessSecret: song-go-chat
+
+Mongo:
+  Url: "mongodb://root:root@192.168.56.1:47017"
+  Db: go-chat
+
+MsgChatTransfer:
+  Addrs:
+    - 192.168.56.1:9092
+  Topic: msgChatTransfer
+
+MsgReadTransfer:
+  Addrs:
+    - 192.168.56.1:9092
+  Topic: msgReadTransfer

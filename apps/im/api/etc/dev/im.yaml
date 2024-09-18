@@ -1,0 +1,24 @@
+Name: im
+Host: 0.0.0.0
+Port: 8882
+
+SocialRpc:
+  Etcd:
+    Hosts:
+      - 192.168.56.1:3379
+    Key: social.rpc
+
+UserRpc:
+  Etcd:
+    Hosts:
+      - 192.168.56.1:3379
+    Key: user.rpc
+
+ImRpc:
+  Etcd:
+    Hosts:
+      - 192.168.56.1:3379
+    Key: im.rpc
+
+JwtAuth:
+  AccessSecret: song-go-chat

@@ -1,0 +1,10 @@
+Name: im.rpc
+ListenOn: 0.0.0.0:10002
+Etcd:
+  Hosts:
+    - 192.168.56.1:3379
+  Key: im.rpc
+
+Mongo:
+  Url: "mongodb://root:root@192.168.56.1:47017"
+  Db: go-chat
